@@ -1,10 +1,15 @@
 package at.jku.restservice;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.Date;
-
+@Entity
 public class HandlebarConfig {
+    @Id
+    @GeneratedValue
     private BigInteger orderId;
     private String handlebarType;
     private String handlebarMaterial;

@@ -1,9 +1,11 @@
 package at.jku.restservice;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +13,8 @@ import java.util.List;
 import java.util.Random;
 
 @RestController public class HandlebarConfigController {
-
+    @Autowired
+    HandlebarRepository handlebarRepository;
     public static final String RENNRADLENKER = "Rennradlenker";
     public static final String FLATBARLENKER = "Flatbarlenker";
     public static final String ALUMINIUM = "Aluminium";
@@ -48,10 +51,13 @@ import java.util.Random;
     }
 
     @PostMapping("/order/{1}/{2}/{3}/{4}")
+    @Transactional
     public ResponseEntity<HandlebarConfig> order(@PathVariable("1") final String handlebarType,
         @PathVariable("2") final String handlebarMaterial,
         @PathVariable("3") final String handlebarGearshift,
-        @PathVariable("4") final String handleMaterial) {
+        @PathVariable("4") final String handleMaterial)
+
+    {
 
         if (!availableHandlebarTypes.contains(handlebarType)) {
             return getBadRequestResponseEntity(handlebarType, handlebarMaterial, handlebarGearshift,
@@ -121,6 +127,8 @@ import java.util.Random;
         final HandlebarConfig handlebarConfig =
             new HandlebarConfig(BigInteger.probablePrime(8, rnd), handlebarType, handlebarMaterial,
                 handlebarGearshift, handleMaterial, new Date());
+     handlebarRepository.save(handlebarConfig);
+     handlebarRepository.findAll().forEach(a->System.out.print("persisted "+ a.toString()));
         return ResponseEntity.ok(handlebarConfig);
     }
 
