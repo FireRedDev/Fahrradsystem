@@ -49,7 +49,7 @@ public class HandlebarConfigClient {
                 System.out.println("Choose type of handle material. Available values are:");
                 request = HttpRequest.newBuilder().uri(URI.create(
                     "http://localhost:8080/getAvailableHandleMaterial?handlebarType="
-                        + handlebarMaterial + "&handlebarMaterial=" + handlebarMaterial)).build();
+                        + handlebarType + "&handlebarMaterial=" + handlebarMaterial)).build();
                 response = client.send(request, HttpResponse.BodyHandlers.ofString());
                 objectMapper.readValue(response.body(), List.class).forEach(System.out::println);
                 System.out.println("Input >");

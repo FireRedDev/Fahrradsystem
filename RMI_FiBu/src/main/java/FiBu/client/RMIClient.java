@@ -1,6 +1,6 @@
-package handlebar.client;
+package FiBu.client;
 
-import handlebar.shared.HandlebarConfigServer;
+import FiBu.shared.OrderTransferServer;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -9,16 +9,16 @@ import java.rmi.registry.Registry;
 
 public class RMIClient {
 
-    private HandlebarConfigServer server;
+    private OrderTransferServer server;
 
     public void startClient() throws RemoteException, NotBoundException {
         //connection to server
         final Registry registry = LocateRegistry.getRegistry("localhost", 1099);
         //search server
-        server = (HandlebarConfigServer) registry.lookup("HandlebarConfigServer");
+        server = (OrderTransferServer) registry.lookup("HandlebarConfigServer");
     }
 
-    public HandlebarConfigServer getServer() {
+    public OrderTransferServer getServer() {
         return server;
     }
 }
