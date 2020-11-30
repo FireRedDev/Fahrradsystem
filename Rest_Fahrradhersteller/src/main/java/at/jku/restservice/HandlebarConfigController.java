@@ -1,5 +1,7 @@
 package at.jku.restservice;
 
+
+import FiBu.shared.OrderTransfer;
 import FiBu.shared.OrderTransferServer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,8 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.text.MessageFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -77,10 +81,16 @@ public class HandlebarConfigController {
         } catch (Exception ex) {
             System.out.println("Error during contacting suppliers");
         }
+        Date datum;
+        try {
+            datum = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMAN).parse(answer.deliverydate);
+        } catch (ParseException e) {
+            datum = new Date();
+        }
         final Random rnd = new Random();
         final HandlebarConfig handlebarConfig =
                 new HandlebarConfig(BigInteger.probablePrime(8, rnd), handlebarType, handlebarMaterial,
-                        handlebarGearshift, handleMaterial, new Date());
+                        handlebarGearshift, handleMaterial,datum);
         handlebarRepository.save(handlebarConfig);
         System.out.println("Persisted Order" + handlebarConfig.toString());
         System.out.println("Send to fibu successfull? : "+callFibu(handlebarConfig, answer.price, answer.deliverydate));
@@ -91,7 +101,7 @@ public class HandlebarConfigController {
     private boolean callFibu(HandlebarConfig handlebarConfig, int price, String deliveryDate) {
         try {
             Registry registry = LocateRegistry.getRegistry();
-            OrderTransferServer server = (OrderTransferServer) registry.lookup("OrderTransfer");
+            OrderTransferServer server = (OrderTransferServer) registry.lookup("FibuServer");
             OrderTransfer responseMessage = server.order(handlebarConfig.getHandlebarType(), handlebarConfig.getHandlebarMaterial(),
                     handlebarConfig.getHandlebarGearshift(), handlebarConfig.getHandleMaterial(),
                     handlebarConfig.getOrderId(), price, deliveryDate);
@@ -99,10 +109,10 @@ public class HandlebarConfigController {
             System.out.println(responseMessage);
             return true;
         } catch (RemoteException ex) {
-            System.out.println(ex.getLocalizedMessage());
+            System.out.println(ex.getMessage());
             return false;
         } catch (NotBoundException ex) {
-            System.out.println(ex.getLocalizedMessage());
+            System.out.println(ex.getMessage());
             return false;
         }
 

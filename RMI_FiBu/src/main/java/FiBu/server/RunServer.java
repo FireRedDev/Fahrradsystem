@@ -12,7 +12,7 @@ public class RunServer {
     public static void main(final String[] args) throws RemoteException, AlreadyBoundException {
         final OrderTransferServer server = new ServerImpl();
         final Registry registry = LocateRegistry.createRegistry(1099);
-        registry.bind("HandlebarConfigServer", server);
+        registry.bind("FibuServer", server);
         System.out.println("Server started");
     }
 }

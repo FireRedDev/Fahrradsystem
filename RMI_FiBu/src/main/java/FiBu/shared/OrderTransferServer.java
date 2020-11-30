@@ -1,5 +1,7 @@
 package FiBu.shared;
 
+import FiBu.shared.OrderTransfer;
+
 import java.math.BigInteger;
 import java.rmi.Remote;
 import java.rmi.RemoteException;

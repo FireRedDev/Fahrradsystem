@@ -47,7 +47,9 @@ public class ServerImpl implements OrderTransferServer {
         }
 
         // Was wollen wir hier, dass zurückgegeben wird?
-        return new OrderTransfer(orderId, handlebarType, handlebarMaterial, handlebarGearshift, handleMaterial,
+        OrderTransfer transfer = new OrderTransfer(orderId, handlebarType, handlebarMaterial, handlebarGearshift, handleMaterial,
                 price, deliveryDate);
+        System.out.println(transfer.toString());
+        return transfer;
     }
 }

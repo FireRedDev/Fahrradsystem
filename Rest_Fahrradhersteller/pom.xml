@@ -51,8 +51,14 @@
 				<artifactId>spring-boot-devtools</artifactId>
 				<optional>true</optional>
 			</dependency>
+        <dependency>
+            <groupId>at.jku</groupId>
+            <artifactId>handlebar-rmi</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>
